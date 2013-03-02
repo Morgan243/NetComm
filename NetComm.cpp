@@ -58,7 +58,7 @@ NetComm::NetComm(bool isListener, string addr, unsigned int port)
 
 NetComm::NetComm(int sockFD)
 {
-
+    this->workingSock = sockFD;
 }
 
 NetComm::~NetComm()
@@ -148,7 +148,7 @@ int NetComm::Accept()
 void NetComm::Send(unsigned char *data, int size)
 {
 //{{{
-    send(SocketFD, data, sizeof(data),0);
+    send(workingSock, data, sizeof(data),0);
 
        //while(1)
        //{
