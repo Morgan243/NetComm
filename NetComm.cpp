@@ -6,9 +6,6 @@ using namespace std;
 
 #define DEBUG 1
 
-#define SERVER_IP "192.168.1.66"
-#define PORT 2337
-
 NetComm::NetComm()
 {
     SetupSock();
@@ -58,6 +55,12 @@ NetComm::NetComm(bool isListener, string addr, unsigned int port)
    }
 //}}}
 }
+
+NetComm::NetComm(int sockFD)
+{
+
+}
+
 NetComm::~NetComm()
 {
     close(SocketFD);
@@ -103,24 +106,42 @@ void NetComm::Connect()
 void NetComm::Listen()
 {
     listen(SocketFD,this->queueLength);
+    #if DEBUG
+        cout<<"Queue Length "<<this->queueLength<<", Listening..."<<endl;
+    #endif
 }
 
 void NetComm::Listen(int connBacklog)
 {
+//{{{
     this->queueLength = connBacklog;
     listen(SocketFD,this->queueLength);
+    #if DEBUG
+        cout<<"Queue Length "<<this->queueLength<<", Listening..."<<endl;
+    #endif
+//}}}
 }
 
 int NetComm::Accept()
 {
+//{{{
     //need size of socket
     sockLength = sizeof(sockAddrIn);
+
+     #if DEBUG
+        cout<<"Blocking on accept..."<<endl;
+    #endif
 
     //accept a single connectiong ans store reutrned socket to workingSock private member
     workingSock = accept(SocketFD, (struct sockaddr *) &sockAddrIn, &sockLength );
 
+    #if DEBUG
+        cout<<"Accepted Connection..."<<endl;
+    #endif
+
     //return the new connected socket
     return workingSock;
+//}}}
 }
 
 //overload a bunch of different sends, yo
