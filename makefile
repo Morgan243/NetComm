@@ -2,7 +2,7 @@
 COMP=g++
 
 #we'll want to try and use C11 threads if the cross compiler can do it
-FLAGS= -c -lpthreads
+FLAGS= -c -lpthreads --std=c++11
 OUT= NetComm.o
 
 all : NetComm.cpp NetComm.h
