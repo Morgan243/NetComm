@@ -58,6 +58,11 @@ NetComm::NetComm(bool isListener, string addr, unsigned int port)
    }
 //}}}
 }
+NetComm::~NetComm()
+{
+    close(SocketFD);
+    close(workingSock);
+}
 
 int NetComm::SetupSock()
 {
@@ -78,6 +83,7 @@ int NetComm::SetupSock()
 
 void NetComm::Connect()
 {
+//{{{
    if(connect(SocketFD,(struct sockaddr *)&sockAddrIn, sizeof(sockAddrIn)) == -1)
    {
         #if DEBUG
@@ -90,18 +96,31 @@ void NetComm::Connect()
    #if DEBUG
    else
         printf("Connection successful\n");
-    #endif
+   #endif
+//}}}
 }
 
 void NetComm::Listen()
 {
-
     listen(SocketFD,this->queueLength);
 }
 
 void NetComm::Listen(int connBacklog)
 {
+    this->queueLength = connBacklog;
+    listen(SocketFD,this->queueLength);
+}
 
+int NetComm::Accept()
+{
+    //need size of socket
+    sockLength = sizeof(sockAddrIn);
+
+    //accept a single connectiong ans store reutrned socket to workingSock private member
+    workingSock = accept(SocketFD, (struct sockaddr *) &sockAddrIn, &sockLength );
+
+    //return the new connected socket
+    return workingSock;
 }
 
 //overload a bunch of different sends, yo
@@ -149,4 +168,9 @@ void NetComm::Send(unsigned char *data, int size)
             //send (SocketFD, peak, sizeof(char)*peak_i, 0);
        //}
 //}}}
+}
+
+int NetComm::Receive(unsigned char *buffer, int size)
+{
+    return read(workingSock, buffer, size);
 }
