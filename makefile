@@ -2,17 +2,17 @@
 COMP=g++
 
 #we'll want to try and use C11 threads if the cross compiler can do it
-FLAGS=-lpthreads --std=c++11
-OUT= NetComm.o
+FLAGS=-lpthread --std=c++11
+OUT=test
 
-all : Test.cpp NetComm.cpp NetComm.h 
-	$(COMP) Test.cpp NetComm.cpp NetComm.h -o test
+all : Test.o NetComm.o
+	$(COMP) Test.o NetComm.o $(FLAGS) -o $(OUT)
 
-#kest.o : Test.cpp
-	#$(COMP) -c Test.cpp -o Test.o
+Test.o : Test.cpp
+	$(COMP) -c Test.cpp $(FLAGS)
 
-#NetComm.o: NetComm.cpp NetComm.h
-	#$(COMP) -c NetComm.cpp NetComm.h -o NetComm.o
+NetComm.o: NetComm.cpp NetComm.h
+	$(COMP) -c NetComm.cpp NetComm.h $(FLAGS)
 
 clean :
-	rm test
+	rm test *.o
