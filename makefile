@@ -5,14 +5,22 @@ COMP=g++
 FLAGS=-lpthread --std=c++11
 OUT=test
 
-all : Test.o NetComm.o
-	$(COMP) Test.o NetComm.o $(FLAGS) -o $(OUT)
+all : Client Server
 
-Test.o : Test.cpp
-	$(COMP) -c Test.cpp $(FLAGS)
+Client : Test_client.o NetComm.o
+	$(COMP) Test_client.o NetComm.o $(FLAGS) -o client
+
+Server : Test_server.o NetComm.o
+	$(COMP) Test_server.o NetComm.o $(FLAGS) -o server
+
+Test_client.o : Test_client.cpp
+	$(COMP) -c Test_client.cpp $(FLAGS)
+
+Test_server.o : Test_server.cpp
+	$(COMP) -c Test_server.cpp $(FLAGS)
 
 NetComm.o: NetComm.cpp NetComm.h
 	$(COMP) -c NetComm.cpp NetComm.h $(FLAGS)
 
 clean :
-	rm test *.o
+	rm client server *.o
