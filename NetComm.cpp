@@ -148,7 +148,10 @@ int NetComm::Accept()
 void NetComm::Send(unsigned char *data, int size)
 {
 //{{{
-    send(workingSock, data, sizeof(data),0);
+    if(this->isClient)
+        send(SocketFD, data, size,0);
+    else if(this->isListener)
+        send(workingSock, data, size,0);
 
        //while(1)
        //{
@@ -193,5 +196,9 @@ void NetComm::Send(unsigned char *data, int size)
 
 int NetComm::Receive(unsigned char *buffer, int size)
 {
-    return read(workingSock, buffer, size);
+    if(this->isListener)
+        return read(workingSock, buffer, size);
+    else if (this->isClient)
+        return read(SocketFD, buffer, size);
+
 }
