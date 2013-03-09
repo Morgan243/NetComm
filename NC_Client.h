@@ -1,12 +1,12 @@
 #include "NetComm.h"
 
-class NC_Client : NetComm
+class NC_Client : public NetComm
 {
     private:
 
     public:
-        NC_Client();
-        NC_Client(std::string address, unsigned int port);
+        explicit NC_Client();
+        explicit NC_Client(std::string address, unsigned int port);
         ~NC_Client();
 
         void Connect();
