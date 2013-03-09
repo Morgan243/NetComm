@@ -10,20 +10,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-struct ServerMembers
-{
-
-};
-
-struct ClientMembers
-{
-    //int sock
-};
-
-
 class NetComm
 {
     protected:
+        bool initialized = false;
         int master_socket;       
 
         sockaddr_in socket_address;
@@ -35,14 +25,13 @@ class NetComm
         explicit NetComm();
         explicit NetComm(int sockFD);
         explicit NetComm(bool isListener, std::string addr,  unsigned int port);
+
+        //setup adress DOES NOT bind
+        void SetupAddress(std::string address, unsigned port);
+
+        //setup address and bind to socket
+        void Init(bool isListener, std::string address, unsigned int port);
         ~NetComm();
 };
 
-
-//needed?
-struct NetOptions
-{
-    
-
-};
 
