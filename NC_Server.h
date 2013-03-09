@@ -11,6 +11,7 @@ class NC_Server : public NetComm
 {
     private:
         int backlog_length;
+        char temp_buffer[1024];
 
         ClientDesc temp_client;
         std::vector<ClientDesc> connected_clients;
@@ -36,5 +37,6 @@ class NC_Server : public NetComm
         int Receive(unsigned char *buffer, int bytes);
         int Receive(unsigned char *buffer, int bytes, int client_id);
         int Receive(unsigned char *buffer, int bytes, std::string client_name);
+        int Receive(std::string *buffer, int bytes, int client_id);
 
 };

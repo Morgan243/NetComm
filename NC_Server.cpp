@@ -125,6 +125,16 @@ else
 //}}}
 }
 
+int NC_Server::Receive(string *buffer, int bytes, int client_id)
+{
+    int bytes_recv = 0;
+
+    bytes_recv = read(this->connected_clients[client_id].socket_fd, this->temp_buffer, bytes);
+
+    *buffer = this->temp_buffer;
+
+    return bytes_recv;
+}
 
 bool NC_Server::SetClientName(int client_id, string client_name)
 {
