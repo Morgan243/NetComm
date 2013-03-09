@@ -7,6 +7,12 @@ NC_Server::NC_Server()
 
 }
 
+NC_Server::NC_Server(int socket) 
+                : NetComm(socket)
+{
+
+}
+
 NC_Server::NC_Server(string address, unsigned int port) 
                 : NetComm(true, address, port)
 {

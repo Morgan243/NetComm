@@ -7,7 +7,7 @@ struct ClientDesc
     std::string name;
 };
 
-class NC_Server : NetComm
+class NC_Server : public NetComm
 {
     private:
         int backlog_length;
@@ -19,8 +19,9 @@ class NC_Server : NetComm
         int FindClient(std::string client_name);
 
     public:
-        NC_Server();
-        NC_Server(std::string address, unsigned int port);
+        explicit NC_Server();
+        explicit NC_Server(int socket);
+        explicit NC_Server(std::string address, unsigned int port);
         ~NC_Server();
 
         void Listen();
