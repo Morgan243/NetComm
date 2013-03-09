@@ -22,6 +22,7 @@ NetComm::NetComm(bool isListener, string addr, unsigned int port)
 
 NetComm::NetComm(int sockFD)
 {
+    cout<<"Constructing network with socket..."<<endl;
     this->master_socket = sockFD;
 
     memset(&this->socket_address, 0, sizeof(this->socket_address));
@@ -78,6 +79,9 @@ void NetComm::SetupAddress(string address, unsigned int port)
 void NetComm::Init(bool isListener, std::string address, unsigned int port)
 {
 //{{{
+
+    cout<<"Initializing network..."<<endl;
+
     if(!initialized)
         SetupSock();
 

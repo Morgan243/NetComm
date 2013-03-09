@@ -38,6 +38,3 @@ class NC_Server : public NetComm
         int Receive(unsigned char *buffer, int bytes, std::string client_name);
 
 };
-
-
-

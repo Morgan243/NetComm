@@ -70,6 +70,8 @@ int NC_Server::Accept()
         cout<<"Accepted Connection..."<<endl;
     #endif
 
+     temp_client.name = "UNSET";
+
      //push updated temp client struct to vector of connected clients
      this->connected_clients.push_back(temp_client);
 
@@ -102,12 +104,13 @@ void NC_Server::Send(unsigned char *data, int bytes, string client_name)
 
 int NC_Server::Receive(unsigned char *buffer, int bytes)
 {
-    read(this->connected_clients.back().socket_fd, buffer, bytes);
+    //read(this->connected_clients.back().socket_fd, buffer, bytes);
+    return read(this->master_socket, buffer, bytes);
 }
 
 int NC_Server::Receive(unsigned char *buffer, int bytes, int client_id)
 {
-    read(this->connected_clients[client_id].socket_fd, buffer, bytes);
+    return read(this->connected_clients[client_id].socket_fd, buffer, bytes);
 }
 
 int NC_Server::Receive(unsigned char *buffer, int bytes, string client_name)

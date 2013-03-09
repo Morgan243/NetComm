@@ -16,6 +16,9 @@ NC_Client::NC_Client(string address, unsigned int port)
 
 NC_Client::~NC_Client()
 {
+    cout<<"Shuting down socket!!"<<endl;
+    shutdown(master_socket, SHUT_RDWR);
+    close(master_socket);
 
 }
 
@@ -40,6 +43,7 @@ if(connect(this->master_socket, (struct sockaddr *)& this->socket_address,sizeof
 
 void NC_Client::Send(unsigned char *data, int bytes)
 {
+    cout<<"Sending : "<<data<<endl;
     send(this->master_socket, data, bytes, 0);
 }
 
