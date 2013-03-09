@@ -17,6 +17,7 @@ NC_Client::NC_Client(string address, unsigned int port)
 NC_Client::~NC_Client()
 {
     cout<<"Shuting down socket!!"<<endl;
+    //Send("SHUTDOWN", 8);
     shutdown(master_socket, SHUT_RDWR);
     close(master_socket);
 
@@ -47,8 +48,32 @@ void NC_Client::Send(unsigned char *data, int bytes)
     send(this->master_socket, data, bytes, 0);
 }
 
+void NC_Client::Send(char *data, int bytes)
+{
+    cout<<"Sending : "<<data<<endl;
+    send(this->master_socket, data, bytes, 0);
+}
+
+void NC_Client::Send(const char *data, int bytes)
+{
+    cout<<"Sending : "<<data<<endl;
+    send(this->master_socket, data, bytes, 0);
+}
+
 int NC_Client::Receive(unsigned char *buffer, int bytes)
 {
     return read(this->master_socket, buffer, bytes);
 }
 
+
+int NC_Client::Receive(string *buffer, int bytes)
+{
+    bzero(this->temp_buffer, sizeof(temp_buffer));
+    int bytes_recv =
+        read(this->master_socket, this->temp_buffer, bytes);
+
+    *buffer = this->temp_buffer;
+
+    return bytes_recv;
+
+}

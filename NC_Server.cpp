@@ -127,9 +127,10 @@ else
 
 int NC_Server::Receive(string *buffer, int bytes, int client_id)
 {
-    int bytes_recv = 0;
+    bzero(this->temp_buffer, sizeof(this->temp_buffer));
 
-    bytes_recv = read(this->connected_clients[client_id].socket_fd, this->temp_buffer, bytes);
+    int bytes_recv =
+        read(this->connected_clients[client_id].socket_fd, this->temp_buffer, bytes);
 
     *buffer = this->temp_buffer;
 

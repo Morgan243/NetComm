@@ -15,6 +15,7 @@ class NetComm
     protected:
         bool initialized = false;
         int master_socket;       
+        char temp_buffer[1024];
 
         sockaddr_in socket_address;
         socklen_t socket_length;
