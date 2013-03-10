@@ -57,7 +57,7 @@ int NC_Server::Accept()
     //need size of socket
     this->socket_length = sizeof(this->socket_address);
 
-     #if DEBUG
+    #if DEBUG
         cout<<"Blocking on accept..."<<endl;
     #endif
 
@@ -70,13 +70,14 @@ int NC_Server::Accept()
         cout<<"Accepted Connection..."<<endl;
     #endif
 
-     temp_client.name = "UNSET";
+    //preset client name
+    temp_client.name = "UNSET";
 
-     //push updated temp client struct to vector of connected clients
-     this->connected_clients.push_back(temp_client);
+    //push updated temp client struct to vector of connected clients
+    this->connected_clients.push_back(temp_client);
 
-     //return the integer id of the now connected client
-     return connected_clients.size() - 1;
+    //return the integer id of the now connected client
+    return connected_clients.size() - 1;
 //}}}
 }
 
@@ -101,10 +102,8 @@ void NC_Server::Send(unsigned char *data, int bytes, string client_name)
 //}}}
 }
 
-
 int NC_Server::Receive(unsigned char *buffer, int bytes)
 {
-    //read(this->connected_clients.back().socket_fd, buffer, bytes);
     return read(this->master_socket, buffer, bytes);
 }
 
@@ -116,25 +115,31 @@ int NC_Server::Receive(unsigned char *buffer, int bytes, int client_id)
 int NC_Server::Receive(unsigned char *buffer, int bytes, string client_name)
 {
 //{{{
-int client_id = FindClient(client_name);
+    int client_id = FindClient(client_name);
 
-if(client_id >= 0)
-    read(this->connected_clients.back().socket_fd, buffer, bytes);
-else
-    cout<<"Cannot receive from a non-existent client..."<<endl;
+    if(client_id >= 0)
+        read(this->connected_clients[client_id].socket_fd, buffer, bytes);
+    else
+        cout<<"Cannot receive from a non-existent client..."<<endl;
 //}}}
 }
 
 int NC_Server::Receive(string *buffer, int bytes, int client_id)
 {
+//{{{
+    //use private temp buffer, zero it out first
     bzero(this->temp_buffer, sizeof(this->temp_buffer));
 
+    //receive into private temp buffer
     int bytes_recv =
         read(this->connected_clients[client_id].socket_fd, this->temp_buffer, bytes);
 
+    //assign received characters to string
     *buffer = this->temp_buffer;
 
+    //how much received
     return bytes_recv;
+//}}}
 }
 
 bool NC_Server::SetClientName(int client_id, string client_name)

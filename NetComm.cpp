@@ -8,12 +8,17 @@ using namespace std;
 
 NetComm::NetComm()
 {
+//{{{
+    initialized = false;
     SetupSock();
+//}}}
 }
 
 NetComm::NetComm(bool isListener, string addr, unsigned int port)
 {
 //{{{
+    initialized = false;
+
     SetupSock();
 
     Init(isListener, addr, port);
@@ -22,14 +27,22 @@ NetComm::NetComm(bool isListener, string addr, unsigned int port)
 
 NetComm::NetComm(int sockFD)
 {
+//{{{
+    initialized = false;
+
     cout<<"Constructing network with socket..."<<endl;
+
+    //set socket to constructor arg
     this->master_socket = sockFD;
 
+    //zero out the address struct
     memset(&this->socket_address, 0, sizeof(this->socket_address));
 
+    //ipv4
     this->socket_address.sin_family = AF_INET;
 
     initialized = true;
+//}}}
 }
 
 NetComm::~NetComm()
@@ -40,15 +53,19 @@ NetComm::~NetComm()
 void NetComm::SetupSock()
 {
 //{{{
+    //create the master socket
     this->master_socket = socket(PF_INET, SOCK_STREAM, 0);
 
-    if( this->master_socket == -1)
+    //check error
+    if(this->master_socket == -1)
     {
         perror("cannot create socket");
     }
 
+    //zero out the address struct
     memset(&this->socket_address, 0, sizeof(this->socket_address));
 
+    //ipv4
     this->socket_address.sin_family = AF_INET;
 
     initialized = true;
@@ -57,6 +74,7 @@ void NetComm::SetupSock()
 
 void NetComm::SetupAddress(string address, unsigned int port)
 {
+//{{{
     //host to network byte order
     this->socket_address.sin_port = htons(port);
 
@@ -74,6 +92,7 @@ void NetComm::SetupAddress(string address, unsigned int port)
             perror("char string error");
             close(this->master_socket);
        }
+//}}}
 }
 
 void NetComm::Init(bool isListener, std::string address, unsigned int port)
@@ -82,19 +101,20 @@ void NetComm::Init(bool isListener, std::string address, unsigned int port)
 
     cout<<"Initializing network..."<<endl;
 
+    //setup socket if not alreadu
     if(!initialized)
         SetupSock();
 
+    //set the address numbers
     SetupAddress(address, port);
 
    //else, IS a SERVER
    if(isListener)
    {
-        //pair socket fd with a port 
+        //pair socket fd with a port and check error
         if(bind(this->master_socket, (struct sockaddr *) & this->socket_address,
                                                                    sizeof(this->socket_address)) < 0)
             perror("Error on bind!");
    }
 //}}}
 }
-

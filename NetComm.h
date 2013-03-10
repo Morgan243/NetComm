@@ -13,7 +13,7 @@
 class NetComm
 {
     protected:
-        bool initialized = false;
+        bool initialized;
         int master_socket;       
         char temp_buffer[1024];
 
