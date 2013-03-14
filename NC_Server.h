@@ -1,13 +1,15 @@
 #include <vector>
 #include "NetComm.h"
 
+#define DEBUG 1
+
 struct ClientDesc
 {
     int socket_fd;
     std::string name;
 };
 
-class NC_Server : NetComm
+class NC_Server : public NetComm
 {
     private:
         int backlog_length;
@@ -19,8 +21,9 @@ class NC_Server : NetComm
         int FindClient(std::string client_name);
 
     public:
-        NC_Server();
-        NC_Server(std::string address, unsigned int port);
+        explicit NC_Server();
+        explicit NC_Server(int socket);
+        explicit NC_Server(std::string address, unsigned int port);
         ~NC_Server();
 
         void Listen();
@@ -35,8 +38,6 @@ class NC_Server : NetComm
         int Receive(unsigned char *buffer, int bytes);
         int Receive(unsigned char *buffer, int bytes, int client_id);
         int Receive(unsigned char *buffer, int bytes, std::string client_name);
+        int Receive(std::string *buffer, int bytes, int client_id);
 
 };
-
-
-
