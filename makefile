@@ -1,38 +1,64 @@
 #need to add support for cross compile
 COMP=g++
-CROSS=arm-unknown-linux-gnueabi-g++
+CROSS_ARM=arm-unknown-linux-gnueabi-g++
+CROSS_PPC=powerpc-linux-gcc
 
 #we'll want to try and use C11 threads if the cross compiler can do it
-FLAGS=-lpthread --std=c++11
+FLAGS=-lpthread #--std=c++11
 OUT=test
 
-all : Client Server
+x86 : Client Server
 
 arm : Client_arm Server_arm
 
+ppc: Client_ppc Server_ppc
+
+
+
 Client_arm : Test_client_arm.o NetComm_arm.o NC_Client_arm.o
-	$(CROSS) Test_client.o NetComm.o NC_Client.o $(FLAGS) -o client
+	$(CROSS_ARM) Test_client.o NetComm.o NC_Client.o $(FLAGS) -o client
 
 Server_arm : Test_server_arm.o NetComm_arm.o NC_Server_arm.o
-	$(CROSS) Test_server.o NetComm.o NC_Server.o $(FLAGS) -o server
+	$(CROSS_ARM) Test_server.o NetComm.o NC_Server.o $(FLAGS) -o server
 
 Test_client_arm.o : Test_client.cpp
-	$(CROSS) -c Test_client.cpp $(FLAGS)
+	$(CROSS_ARM) -c Test_client.cpp $(FLAGS)
 
 Test_server_arm.o : Test_server.cpp
-	$(CROSS) -c Test_server.cpp $(FLAGS)
+	$(CROSS_ARM) -c Test_server.cpp $(FLAGS)
 
 NC_Client_arm.o : NC_Client.cpp NC_Client.h
-	$(CROSS) -c NC_Client.cpp NC_Client.h $(FLAGS)
+	$(CROSS_ARM) -c NC_Client.cpp NC_Client.h $(FLAGS)
 
 NC_Server_arm.o : NC_Server.cpp NC_Server.h
-	$(CROSS) -c NC_Server.cpp NC_Server.h $(FLAGS)
+	$(CROSS_ARM) -c NC_Server.cpp NC_Server.h $(FLAGS)
 
 NetComm_arm.o: NetComm.cpp NetComm.h
-	$(CROSS) -c NetComm.cpp NetComm.h $(FLAGS)
+	$(CROSS_ARM) -c NetComm.cpp NetComm.h $(FLAGS)
 
 
 
+
+Client_ppc : Test_client_ppc.o NetComm_ppc.o NC_Client_ppc.o
+	$(CROSS_PPC) Test_client.o NetComm.o NC_Client.o $(FLAGS) -o client
+
+Server_ppc : Test_server_ppc.o NetComm_ppc.o NC_Server_ppc.o
+	$(CROSS_PPC) Test_server.o NetComm.o NC_Server.o $(FLAGS) -o server
+
+Test_client_ppc.o : Test_client.cpp
+	$(CROSS_PPC) -c Test_client.cpp $(FLAGS)
+
+Test_server_ppc.o : Test_server.cpp
+	$(CROSS_PPC) -c Test_server.cpp $(FLAGS)
+
+NC_Client_ppc.o : NC_Client.cpp NC_Client.h
+	$(CROSS_PPC) -c NC_Client.cpp NC_Client.h $(FLAGS)
+
+NC_Server_ppc.o : NC_Server.cpp NC_Server.h
+	$(CROSS_PPC) -c NC_Server.cpp NC_Server.h $(FLAGS)
+
+NetComm_ppc.o: NetComm.cpp NetComm.h
+	$(CROSS_PPC) -c NetComm.cpp NetComm.h $(FLAGS)
 
 
 
@@ -58,6 +84,8 @@ NC_Server.o : NC_Server.cpp NC_Server.h
 
 NetComm.o: NetComm.cpp NetComm.h
 	$(COMP) -c NetComm.cpp NetComm.h $(FLAGS)
+
+
 
 clean :
 	rm client server *.o *.gch
