@@ -1,6 +1,8 @@
 #include <vector>
 #include "NetComm.h"
 
+#define DEBUG 1
+
 struct ClientDesc
 {
     int socket_fd;

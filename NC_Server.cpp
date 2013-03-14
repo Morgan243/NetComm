@@ -46,7 +46,7 @@ void NC_Server::Listen(int connBacklog)
     listen(this->master_socket,this->backlog_length);
 
     #if DEBUG
-        cout<<"Queue Length "<<this->queueLength<<", Listening..."<<endl;
+        cout<<"Queue Length "<<this->backlog_length<<", Listening..."<<endl;
     #endif
 //}}}
 }

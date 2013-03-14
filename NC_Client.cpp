@@ -17,7 +17,10 @@ NC_Client::NC_Client(string address, unsigned int port)
 NC_Client::~NC_Client()
 {
 //{{{
+    #if DEBUG
     cout<<"Shuting down socket!!"<<endl;
+    #endif
+
     shutdown(master_socket, SHUT_RDWR);
     close(master_socket);
 //}}}
