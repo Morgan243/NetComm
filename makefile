@@ -1,7 +1,7 @@
 #need to add support for cross compile
 COMP=g++
 CROSS_ARM=arm-unknown-linux-gnueabi-g++
-CROSS_PPC=powerpc-linux-gcc
+CROSS_PPC=powerpc-linux-g++
 
 #we'll want to try and use C11 threads if the cross compiler can do it
 FLAGS=-lpthread #--std=c++11
