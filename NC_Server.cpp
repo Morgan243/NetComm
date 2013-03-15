@@ -66,6 +66,8 @@ int NC_Server::Accept()
              (struct sockaddr *) &socket_address,
                                   &socket_length);
 
+
+    setsockopt(temp_client.socket_fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
     #if DEBUG
         cout<<"Accepted Connection..."<<endl;
     #endif
@@ -96,7 +98,9 @@ void NC_Server::Send(unsigned char *data, int bytes, string client_name)
 //{{{
     int client_id = FindClient(client_name);
     if(client_id >= 0)
+    {
         send(this->connected_clients[client_id].socket_fd, data, bytes, 0);
+    }
     else
         cout<<"Unable to send, not such client..."<<endl;
 //}}}
@@ -127,6 +131,9 @@ int NC_Server::Receive(unsigned char *buffer, int bytes, string client_name)
 int NC_Server::Receive(string *buffer, int bytes, int client_id)
 {
 //{{{
+
+    buffer->erase();
+
     //use private temp buffer, zero it out first
     bzero(this->temp_buffer, sizeof(this->temp_buffer));
 

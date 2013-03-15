@@ -5,6 +5,7 @@
 #include <string.h>
 #include <iostream>
 
+#include <linux/tcp.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -15,6 +16,7 @@ class NetComm
     protected:
         bool initialized;
         int master_socket;       
+        int flag;
         char temp_buffer[1024];
 
         sockaddr_in socket_address;

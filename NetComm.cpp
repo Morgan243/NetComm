@@ -9,6 +9,7 @@ using namespace std;
 NetComm::NetComm()
 {
 //{{{
+    flag = 1;
     initialized = false;
     SetupSock();
 //}}}
@@ -17,6 +18,7 @@ NetComm::NetComm()
 NetComm::NetComm(bool isListener, string addr, unsigned int port)
 {
 //{{{
+    flag = 1;
     initialized = false;
 
     SetupSock();
@@ -29,6 +31,8 @@ NetComm::NetComm(int sockFD)
 {
 //{{{
     initialized = false;
+
+    flag = 1;
 
     cout<<"Constructing network with socket..."<<endl;
 
@@ -55,6 +59,8 @@ void NetComm::SetupSock()
 //{{{
     //create the master socket
     this->master_socket = socket(PF_INET, SOCK_STREAM, 0);
+
+    setsockopt(this->master_socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
 
     //check error
     if(this->master_socket == -1)
