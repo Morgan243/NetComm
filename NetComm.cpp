@@ -51,7 +51,20 @@ NetComm::NetComm(int sockFD)
 
 NetComm::~NetComm()
 {
+//{{{
+    #if DEBUG
+        cout<<"Shuting down socket!!"<<endl;
+    #endif
+    char buf[256];
+
+    //begin shutdown
+    shutdown(master_socket, SHUT_RDWR);
+
+    //be sure to read everything
+    while(read(this->master_socket, buf, 256) > 0);
+
     close(master_socket);
+//}}}
 }
 
 void NetComm::SetupSock()

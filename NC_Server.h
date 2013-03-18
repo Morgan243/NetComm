@@ -26,6 +26,11 @@ class NC_Server : public NetComm
         explicit NC_Server(std::string address, unsigned int port);
         ~NC_Server();
 
+        //returns number of bytes read as ending (should a buffer reference be added?)
+        int EndClientConnection(int client_id);
+        int EndClientConnection(std::string client_name);
+        void EndAllConnections();
+
         //seupt master socket to listen
         void Listen();
         void Listen(int connBacklog);

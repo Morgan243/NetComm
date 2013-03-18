@@ -14,7 +14,88 @@ NC_Server::NC_Server(string address, unsigned int port)
 {}
 
 NC_Server::~NC_Server()
-{}
+{
+//{{{
+    #if DEBUG
+        cout<<"Shuting down socket!!"<<endl;
+    #endif
+
+    //shutdown all the clients connections
+    EndAllConnections();
+
+    //begin shutdown
+    shutdown(master_socket, SHUT_RDWR);
+
+    //make sure to read everything
+    while(Receive((unsigned char *)temp_buffer,1024) > 0);
+
+    close(master_socket);
+//}}}
+}
+
+int NC_Server::EndClientConnection(int client_id)
+{
+//{{{
+    #if DEBUG
+        cout<<"Shuting down socket!!"<<endl;
+    #endif
+
+    //begin shutdown
+    shutdown(connected_clients[client_id].socket_fd, SHUT_RDWR);
+
+    //make sure to read everything
+    while(Receive((unsigned char *)temp_buffer,1024, client_id) > 0);
+
+    close(connected_clients[client_id].socket_fd);
+//}}}
+}
+
+int NC_Server::EndClientConnection(string client_name)
+{
+//{{{
+    int client_id = FindClient(client_name);
+
+    if(client_id < 0 || client_id >= connected_clients.size())
+    {
+        cout<<"Error ending client connection named "<<client_name<<endl;
+        return -1;
+    }
+
+    #if DEBUG
+        cout<<"Shuting down socket!!"<<endl;
+    #endif
+
+    //begin shutdown
+    shutdown(connected_clients[client_id].socket_fd, SHUT_RDWR);
+
+    //make sure to read everything
+    while(Receive((unsigned char *)temp_buffer,1024, client_id) > 0);
+
+    close(connected_clients[client_id].socket_fd);
+//}}}
+
+}
+
+void NC_Server::EndAllConnections()
+{
+//{{{
+    #if DEBUG
+        cout<<"Shuting all socket!!"<<endl;
+    #endif
+
+    //shutdown all the cilents sockets
+    for(int i = 0; i < connected_clients.size(); i++)
+    {
+        //begin shutdown
+        shutdown(connected_clients[i].socket_fd, SHUT_RDWR);
+
+        //make sure to read everything
+        while(Receive((unsigned char *)temp_buffer,1024, i) > 0);
+
+        close(connected_clients[i].socket_fd);
+    }
+//}}}
+}
 
 void NC_Server::Listen()
 {

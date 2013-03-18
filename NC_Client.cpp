@@ -21,7 +21,11 @@ NC_Client::~NC_Client()
     cout<<"Shuting down socket!!"<<endl;
     #endif
 
+    //begin shutdown
     shutdown(master_socket, SHUT_RDWR);
+
+    //make sure to read everything
+    while(Receive((unsigned char *)temp_buffer,1024) > 0);
 
     close(master_socket);
 //}}}
