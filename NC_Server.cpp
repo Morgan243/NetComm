@@ -3,26 +3,18 @@
 using namespace std;
 
 NC_Server::NC_Server()
-{
-
-}
+{}
 
 NC_Server::NC_Server(int socket) 
                 : NetComm(socket)
-{
-
-}
+{}
 
 NC_Server::NC_Server(string address, unsigned int port) 
                 : NetComm(true, address, port)
-{
-
-}
+{}
 
 NC_Server::~NC_Server()
-{
-
-}
+{}
 
 void NC_Server::Listen()
 {
@@ -67,7 +59,9 @@ int NC_Server::Accept()
                                   &socket_length);
 
 
+    //disable the nagle algorithm on the socket
     setsockopt(temp_client.socket_fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
+
     #if DEBUG
         cout<<"Accepted Connection..."<<endl;
     #endif

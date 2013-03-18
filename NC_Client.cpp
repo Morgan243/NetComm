@@ -22,6 +22,7 @@ NC_Client::~NC_Client()
     #endif
 
     shutdown(master_socket, SHUT_RDWR);
+
     close(master_socket);
 //}}}
 }
