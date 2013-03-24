@@ -153,28 +153,30 @@ int NC_Server::Accept()
     //push updated temp client struct to vector of connected clients
     this->connected_clients.push_back(temp_client);
 
+    this->connected_clients.back().temp_buffer = (char *)malloc(sizeof(char)*1024);
+
     //return the integer id of the now connected client
     return connected_clients.size() - 1;
 //}}}
 }
 
-void NC_Server::Send(unsigned char *data, int bytes)
+int NC_Server::Send(unsigned char *data, int bytes)
 {
-    send(this->connected_clients.back().socket_fd, data, bytes, 0);
+    return send(this->connected_clients.back().socket_fd, data, bytes, 0);
 }
 
-void NC_Server::Send(unsigned char *data, int bytes, int client_id)
+int NC_Server::Send(unsigned char *data, int bytes, int client_id)
 {
-    send(this->connected_clients[client_id].socket_fd, data, bytes, 0);
+    return send(this->connected_clients[client_id].socket_fd, data, bytes, 0);
 }
 
-void NC_Server::Send(unsigned char *data, int bytes, string client_name)
+int NC_Server::Send(unsigned char *data, int bytes, string client_name)
 {
 //{{{
     int client_id = FindClient(client_name);
     if(client_id >= 0)
     {
-        send(this->connected_clients[client_id].socket_fd, data, bytes, 0);
+        return send(this->connected_clients[client_id].socket_fd, data, bytes, 0);
     }
     else
         cout<<"Unable to send, not such client..."<<endl;
@@ -210,14 +212,16 @@ int NC_Server::Receive(string *buffer, int bytes, int client_id)
     buffer->erase();
 
     //use private temp buffer, zero it out first
-    bzero(this->temp_buffer, sizeof(this->temp_buffer));
+    bzero(connected_clients[client_id].temp_buffer, sizeof(connected_clients[client_id].temp_buffer));
 
+    cout<<"PRe-receive buffer: "<<connected_clients[client_id].temp_buffer<<", string is: "<< *buffer<<endl;
     //receive into private temp buffer
     int bytes_recv =
-        read(this->connected_clients[client_id].socket_fd, this->temp_buffer, bytes);
+        read(this->connected_clients[client_id].socket_fd, connected_clients[client_id].temp_buffer, bytes);
 
+    cout<<"RECEIVED "<<bytes_recv<<" BYTES IN NC SERVER: "<<connected_clients[client_id].temp_buffer<<endl;
     //assign received characters to string
-    *buffer = this->temp_buffer;
+    *buffer = connected_clients[client_id].temp_buffer;
 
     //how much received
     return bytes_recv;

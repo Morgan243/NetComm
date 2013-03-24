@@ -52,17 +52,20 @@ if(connect(this->master_socket, (struct sockaddr *)& this->socket_address,sizeof
 
 void NC_Client::Send(unsigned char *data, int bytes)
 {
+    cout<<"unsigned CHAR send: "<<data<<"doNE"<<endl;
     send(this->master_socket, data, bytes, 0);
 }
 
 void NC_Client::Send(char *data, int bytes)
 {
+    cout<<"CHAR send: "<<data<<"dOnE"<<endl;
     send(this->master_socket, data, bytes, 0);
 }
 
 void NC_Client::Send(const char *data, int bytes)
 {
-    send(this->master_socket, data, bytes, 0);
+    cout<<"CONST send: "<<data<<"(DoNe)"<<endl;
+    cout<<"Sent "<<send(this->master_socket, data, bytes, 0)<<" bytes"<<endl;
 }
 
 int NC_Client::Receive(unsigned char *buffer, int bytes)

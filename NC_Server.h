@@ -6,6 +6,7 @@
 struct ClientDesc
 {
     int socket_fd;
+    char *temp_buffer;
     std::string name;
 };
 
@@ -39,9 +40,9 @@ class NC_Server : public NetComm
         int Accept();
 
         //send a char array to a client
-        void Send(unsigned char *data, int bytes);                      //defaults to last client (.back())
-        void Send(unsigned char *data, int bytes, int client_id);
-        void Send(unsigned char *data, int bytes, std::string client_name);
+        int Send(unsigned char *data, int bytes);                      //defaults to last client (.back())
+        int Send(unsigned char *data, int bytes, int client_id);
+        int Send(unsigned char *data, int bytes, std::string client_name);
 
         //receive into a buffer
         int Receive(unsigned char *buffer, int bytes);
