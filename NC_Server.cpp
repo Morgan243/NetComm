@@ -73,7 +73,6 @@ int NC_Server::EndClientConnection(string client_name)
 
     close(connected_clients[client_id].socket_fd);
 //}}}
-
 }
 
 void NC_Server::EndAllConnections()
@@ -214,12 +213,18 @@ int NC_Server::Receive(string *buffer, int bytes, int client_id)
     //use private temp buffer, zero it out first
     bzero(connected_clients[client_id].temp_buffer, sizeof(connected_clients[client_id].temp_buffer));
 
-    cout<<"PRe-receive buffer: "<<connected_clients[client_id].temp_buffer<<", string is: "<< *buffer<<endl;
+    #if DEBUG
+        cout<<"PRe-receive buffer: "<<connected_clients[client_id].temp_buffer<<", string is: "<< *buffer<<endl;
+    #endif
+
     //receive into private temp buffer
     int bytes_recv =
         read(this->connected_clients[client_id].socket_fd, connected_clients[client_id].temp_buffer, bytes);
 
-    cout<<"RECEIVED "<<bytes_recv<<" BYTES IN NC SERVER: "<<connected_clients[client_id].temp_buffer<<endl;
+    #if DEBUG
+        cout<<"RECEIVED "<<bytes_recv<<" BYTES IN NC SERVER: "<<connected_clients[client_id].temp_buffer<<endl;
+    #endif
+
     //assign received characters to string
     *buffer = connected_clients[client_id].temp_buffer;
 
@@ -231,27 +236,27 @@ int NC_Server::Receive(string *buffer, int bytes, int client_id)
 bool NC_Server::SetClientName(int client_id, string client_name)
 {
 //{{{
-if(client_id < 0 || client_id > this->connected_clients.size() - 1)
-{
-    cout<<"No client with that id exists..."<<endl;
-    return false;
-}
+    if(client_id < 0 || client_id > this->connected_clients.size() - 1)
+    {
+        cout<<"No client with that id exists..."<<endl;
+        return false;
+    }
 
-this->connected_clients[client_id].name = client_name;
-return true;
+    this->connected_clients[client_id].name = client_name;
+    return true;
 //}}}
 }
 
 int NC_Server::FindClient(std::string client_name)
 {
 //{{{
-for(int i = 0; i < this->connected_clients.size(); i++)
-{
-    if(connected_clients[i].name == client_name)
-        return i;
-}
+    for(int i = 0; i < this->connected_clients.size(); i++)
+    {
+        if(connected_clients[i].name == client_name)
+            return i;
+    }
 
-printf("Client not found in connected clients listing...\n");
-return -1;
+    printf("Client not found in connected clients listing...\n");
+    return -1;
 //}}}
 }

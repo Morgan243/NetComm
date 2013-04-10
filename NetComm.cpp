@@ -4,8 +4,6 @@
 
 using namespace std;
 
-#define DEBUG 1
-
 NetComm::NetComm()
 {
 //{{{
@@ -34,7 +32,9 @@ NetComm::NetComm(int sockFD)
 
     flag = 1;
 
-    cout<<"Constructing network with socket..."<<endl;
+    #if DEBUG
+        cout<<"Constructing network with socket..."<<endl;
+    #endif
 
     //set socket to constructor arg
     this->master_socket = sockFD;
@@ -118,7 +118,9 @@ void NetComm::Init(bool isListener, std::string address, unsigned int port)
 {
 //{{{
 
-    cout<<"Initializing network..."<<endl;
+    #if DEBUG
+        cout<<"Initializing network..."<<endl;
+    #endif
 
     //setup socket if not alreadu
     if(!initialized)

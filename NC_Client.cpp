@@ -18,7 +18,7 @@ NC_Client::~NC_Client()
 {
 //{{{
     #if DEBUG
-    cout<<"Shuting down socket!!"<<endl;
+        cout<<"Shuting down socket!!"<<endl;
     #endif
 
     //begin shutdown
@@ -34,37 +34,43 @@ NC_Client::~NC_Client()
 void NC_Client::Connect()
 {
 //{{{
-if(connect(this->master_socket, (struct sockaddr *)& this->socket_address,sizeof(this->socket_address)) == -1)
-   {
+    if(connect(this->master_socket, (struct sockaddr *)& this->socket_address,sizeof(this->socket_address)) == -1)
+    {
         #if DEBUG
             printf("CONNECTION ERROR!\n");
         #endif
 
         perror("connect failed");
         close(this->master_socket);
-   }
-   #if DEBUG
-   else
+    }
+    #if DEBUG
+    else
         printf("Connection successful\n");
-   #endif
+    #endif
 //}}}
 }
 
 void NC_Client::Send(unsigned char *data, int bytes)
 {
-    cout<<"unsigned CHAR send: "<<data<<"doNE"<<endl;
+    #if DEBUG
+        cout<<"unsigned CHAR send: "<<data<<"doNE"<<endl;
+    #endif
     send(this->master_socket, data, bytes, 0);
 }
 
 void NC_Client::Send(char *data, int bytes)
 {
-    cout<<"CHAR send: "<<data<<"dOnE"<<endl;
+    #if DEBUG
+        cout<<"CHAR send: "<<data<<"dOnE"<<endl;
+    #endif
     send(this->master_socket, data, bytes, 0);
 }
 
 void NC_Client::Send(const char *data, int bytes)
 {
-    cout<<"CONST send: "<<data<<"(DoNe)"<<endl;
+    #if DEBUG
+        cout<<"CONST send: "<<data<<"(DoNe)"<<endl;
+    #endif
     cout<<"Sent "<<send(this->master_socket, data, bytes, 0)<<" bytes"<<endl;
 }
 

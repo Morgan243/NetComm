@@ -10,7 +10,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-
+#define DEBUG 0
 class NetComm
 {
     protected:
