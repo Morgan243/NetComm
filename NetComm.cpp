@@ -97,10 +97,13 @@ void NetComm::SetupAddress(string address, unsigned int port)
     //host to network byte order
     this->socket_address.sin_port = htons(port);
 
-    //convert the address to binary form
-    int res = inet_pton(AF_INET, address.c_str(), &this->socket_address.sin_addr);
+    //check for any keyword
+    if(address != "any")
+    {
+       //convert the address to binary form
+       int res = inet_pton(AF_INET, address.c_str(), &this->socket_address.sin_addr);
 
-        //check for errors in conversion
+       //check for errors in conversion
        if( res < 0)
        {
             perror("error: first parameter not valid");
@@ -111,6 +114,11 @@ void NetComm::SetupAddress(string address, unsigned int port)
             perror("char string error");
             close(this->master_socket);
        }
+    }
+    else
+    {
+        socket_address.sin_addr.s_addr = INADDR_ANY;
+    }
 //}}}
 }
 
