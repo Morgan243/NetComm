@@ -5,7 +5,8 @@
 #include <string.h>
 #include <iostream>
 
-#include <linux/tcp.h>
+//#include <linux/tcp.h>
+#include <netinet/tcp.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
