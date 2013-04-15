@@ -75,6 +75,14 @@ void NetComm::SetupSock()
 
     setsockopt(this->master_socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
 
+    // lose the pesky "Address already in use" error message
+    int yes = 1;
+    if (setsockopt(this->master_socket,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int)) == -1)
+    {
+         perror("setsockopt");
+         exit(1);
+    } 
+
     //check error
     if(this->master_socket == -1)
     {
