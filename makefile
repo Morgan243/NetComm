@@ -3,7 +3,7 @@ COMP=g++
 CROSS_ARM=arm-unknown-linux-gnueabi-g++
 CROSS_PPC=powerpc-linux-g++
 
-FLAGS=-lpthread 
+FLAGS=-lpthread -fPIC
 OUT=test
 
 x86 : Client Server
